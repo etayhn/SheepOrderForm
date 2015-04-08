@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Deberes 1</string>
+
+    <string name="hello_world">Hola, mundo!</string>
+    <string name="action_settings">Ajustes</string>
+    <string name="title_activity_order_sent">Pedido Enviada</string>
+    <string name="sheep_order_form">Hoja de pedido de ovejas</string>
+    <string name="select_num_of_sheep">Escoja el número de ovejas, por favor</string>
+    <string name="with_food">Con comida</string>
+    <string name="make_order">Pida!</string>
+    <string name="your_order_has_been_sent">Su pedido ha sido enviado!</string>
+    <string name="select">Escoja</string>
+</resources>
