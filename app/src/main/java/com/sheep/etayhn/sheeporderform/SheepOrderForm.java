@@ -1,5 +1,6 @@
 package com.sheep.etayhn.sheeporderform;
 
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.text.Editable;
@@ -20,16 +21,14 @@ import android.widget.Toast;
 
 public class SheepOrderForm extends ActionBarActivity implements View.OnClickListener, TextWatcher, SeekBar.OnSeekBarChangeListener, CompoundButton.OnCheckedChangeListener {
 
+    public static final int MAX_SHEEP_NUM_DIGITS = 2;
+    public static final int MAX_SHEEP_VALUE = ((int) Math.pow(10, MAX_SHEEP_NUM_DIGITS)) - 1; // exclusive
     private Button makeOrderButton;
     private SeekBar numSheepSeekBar;
     private CheckBox withFoodCheckBox;
     private EditText numSheepEditText;
     private Button selectFoodButton;
-
     private MenuItem makeOrderMenuItem;
-
-    public static final int MAX_SHEEP_NUM_DIGITS = 2;
-    public static final int MAX_SHEEP_VALUE = ((int) Math.pow(10, MAX_SHEEP_NUM_DIGITS)) - 1; // exclusive
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -118,8 +117,19 @@ public class SheepOrderForm extends ActionBarActivity implements View.OnClickLis
         if (v.getId() == R.id.b_order) {
             makeOrder();
         } else if (v.getId() == R.id.b_select) {
-//            Intent orderSentIntent = new Intent(getApplicationContext(), order_sent.class);
-//            startActivityForResult(orderSentIntent);
+            Intent selectFoodList = new Intent(getApplicationContext(), SelectFoodList.class);
+            startActivityForResult(selectFoodList, Constants.SELECT_FOOD_TAG);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        // Handle the result according to the parameters
+        if (requestCode == Constants.SELECT_FOOD_TAG) {
+            // assertEquals(Activity.RESULT_OK, resultCode);
+            String chosenFood = data.getStringExtra(Constants.CHOSEN_FOOD_TAG);
+            Toast.makeText(getApplicationContext(), getResources().getString(R.string.you_chose) + " " + chosenFood, Toast.LENGTH_SHORT).show();
         }
     }
 

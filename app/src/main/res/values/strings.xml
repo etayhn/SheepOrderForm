@@ -9,4 +9,18 @@
     <string name="make_order">Make order</string>
     <string name="your_order_has_been_sent">Your order has been sent!</string>
     <string name="select">Select</string>
+    <string name="title_activity_select_food_list">Select Food</string>
+    <string name="you_chose">You chose:</string>
+
+    <string name="baby_moses">Baby Moses in a Basket</string>
+    <string name="pineapple_hedgehog">Pineapple Hedgehog</string>
+    <string name="turtle_burger">Tutle Burger</string>
+    <string name="cauliflower_sheep">Cauliflower Sheep</string>
+    <string name="rice_piggies">Rice Piggies</string>
+    <string name="watermelon_man">Watermelon Man</string>
+    <string name="orange_kitten">Orange Kitten</string>
+    <string name="snake_cake">Snake Cake</string>
+
+
+    <string name="hello_world">Hello world!</string>
 </resources>

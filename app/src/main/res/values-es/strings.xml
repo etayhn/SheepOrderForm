@@ -10,4 +10,17 @@
     <string name="make_order">Pida!</string>
     <string name="your_order_has_been_sent">Su pedido ha sido enviado!</string>
     <string name="select">Escoja</string>
+    <string name="title_activity_select_food_list">Escoja comida</string>
+    <string name="you_chose">Escogió:</string>
+
+    <string name="baby_moses">Moisés Canastilla</string>
+    <string name="pineapple_hedgehog">Erizo de Piña</string>
+    <string name="turtle_burger">Tortuga de Hamburguesa</string>
+    <string name="cauliflower_sheep">Ovejas de Coliflor</string>
+    <string name="rice_piggies">Cerditos de Arroz</string>
+    <string name="watermelon_man">Hombre Sandía</string>
+    <string name="orange_kitten">Gatito de Naranje</string>
+    <string name="snake_cake">Serpiente de Pastel</string>
+
+
 </resources>
