@@ -1,6 +1,16 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools" tools:context=".SheepOrderForm">
-    <item android:id="@+id/action_settings" android:title="@string/action_settings"
-        android:orderInCategory="100" app:showAsAction="never" />
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".SheepOrderForm">
+
+    <item
+        android:id="@+id/mi_make_order"
+        android:orderInCategory="100"
+        android:title="@string/make_order"
+        android:titleCondensed="@string/make_order"
+        app:showAsAction="always"
+        android:enabled="false"
+        android:icon="@android:drawable/ic_menu_send"
+        />
+
 </menu>

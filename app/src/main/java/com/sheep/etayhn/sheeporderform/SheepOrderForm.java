@@ -5,6 +5,10 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextWatcher;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -20,18 +24,24 @@ public class SheepOrderForm extends ActionBarActivity implements View.OnClickLis
     private SeekBar numSheepSeekBar;
     private CheckBox withFoodCheckBox;
     private EditText numSheepEditText;
-    private int editTextPosition;
+    private Button selectFoodButton;
 
-    public static final int MAX_SHEEP_NUM_DIGITS = 3;
+    private MenuItem makeOrderMenuItem;
+
+    public static final int MAX_SHEEP_NUM_DIGITS = 2;
     public static final int MAX_SHEEP_VALUE = ((int) Math.pow(10, MAX_SHEEP_NUM_DIGITS)) - 1; // exclusive
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d("WHERE", "onCreate");
         setContentView(R.layout.activity_sheep_order_form);
 
         makeOrderButton = (Button) findViewById(R.id.b_order);
         makeOrderButton.setOnClickListener(this);
+
+        selectFoodButton = (Button) findViewById(R.id.b_select);
+        selectFoodButton.setOnClickListener(this);
 
         numSheepEditText = (EditText) findViewById(R.id.et_numSheep);
         numSheepEditText.addTextChangedListener(this);
@@ -50,37 +60,72 @@ public class SheepOrderForm extends ActionBarActivity implements View.OnClickLis
         numSheepEditText.setFilters(filterArray);
     }
 
+    /* ********* Menu ********* */
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        Log.d("WHERE", "onCreateOptionsMenu");
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_sheep_order_form, menu);
+        makeOrderMenuItem = menu.findItem(R.id.mi_make_order);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        Log.d("WHERE", "onOptionsItemSelected");
+        if (item.getItemId() == R.id.mi_make_order) {
+            makeOrder();
+        }
+        return true;
+    }
+
     /* ********* BUTTON ********* */
 
-    public void updateButtonStateIfNecessary() {
+    private boolean getMakeOrderEnablingState() {
+
+        Log.d("WHERE", "getMakeOrderEnablingState");
 
         // getting the value from the EditText
         String stringValue = numSheepEditText.getText().toString();
         int numSheepValue;
-        try {
-            numSheepValue = Integer.parseInt(stringValue);
-        } catch (NumberFormatException nfe) {
-            numSheepValue = 0;
-        }
+        numSheepValue = Integer.parseInt(stringValue);
 
         // getting the CheckBox state
         boolean isWithFoodChecked = withFoodCheckBox.isChecked();
 
         // enabling the button iff numSheep>0 and the checkbox is checked
-        if (isWithFoodChecked && numSheepValue > 0) {
-            makeOrderButton.setEnabled(true);
-        } else {
-            makeOrderButton.setEnabled(false);
+        return (isWithFoodChecked && numSheepValue > 0);
+    }
+
+    public void updateMakeOrderEnabled() {
+        Log.d("WHERE", "updateMakeOrderEnabled");
+
+        boolean desiredState = getMakeOrderEnablingState();
+
+        makeOrderButton.setEnabled(desiredState);
+
+        if (makeOrderMenuItem != null) {
+            makeOrderMenuItem.setEnabled(desiredState);
         }
+
+
     }
 
     @Override
     public void onClick(View v) {
+        Log.d("WHERE", "onClick");
         if (v.getId() == R.id.b_order) {
-            Toast.makeText(getApplicationContext(), R.string.your_order_has_been_sent, Toast.LENGTH_SHORT).show();
+            makeOrder();
+        } else if (v.getId() == R.id.b_select) {
 //            Intent orderSentIntent = new Intent(getApplicationContext(), order_sent.class);
-//            startActivity(orderSentIntent);
+//            startActivityForResult(orderSentIntent);
         }
+    }
+
+    public void makeOrder() {
+        Log.d("WHERE", "makeOrder");
+        Toast.makeText(getApplicationContext(), R.string.your_order_has_been_sent, Toast.LENGTH_SHORT).show();
     }
 
     /* ********* EDIT TEXT ********* */
@@ -92,6 +137,7 @@ public class SheepOrderForm extends ActionBarActivity implements View.OnClickLis
 
     @Override
     public void onTextChanged(CharSequence s, int start, int before, int count) {
+        Log.d("WHERE", "onTextChanged");
         int value;
 
         // retrieving the value
@@ -105,7 +151,7 @@ public class SheepOrderForm extends ActionBarActivity implements View.OnClickLis
         numSheepSeekBar.setProgress(value);
 
         // enabling or disabling the button
-        updateButtonStateIfNecessary();
+        updateMakeOrderEnabled();
 
         // putting the cursor in place
         int cursorPosition = start + count;
@@ -124,6 +170,8 @@ public class SheepOrderForm extends ActionBarActivity implements View.OnClickLis
 
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+        Log.d("WHERE", "onProgressChanged");
+
         // getting the SeekBar value
         int numSheepValue = seekBar.getProgress();
 
@@ -131,7 +179,7 @@ public class SheepOrderForm extends ActionBarActivity implements View.OnClickLis
         numSheepEditText.setText("" + numSheepValue);
 
         // enabling or disabling the button
-        updateButtonStateIfNecessary();
+        updateMakeOrderEnabled();
     }
 
     @Override
@@ -148,7 +196,14 @@ public class SheepOrderForm extends ActionBarActivity implements View.OnClickLis
 
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        // enabling or disabling the button
-        updateButtonStateIfNecessary();
+        Log.d("WHERE", "onCheckedChanged");
+        // enabling or disabling the 'select' button
+        if (isChecked) {
+            selectFoodButton.setEnabled(true);
+        } else {
+            selectFoodButton.setEnabled(false);
+        }
+        // enabling or disabling the 'make order' buttons
+        updateMakeOrderEnabled();
     }
 }
