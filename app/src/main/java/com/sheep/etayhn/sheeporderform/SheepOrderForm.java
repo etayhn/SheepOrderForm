@@ -1,10 +1,9 @@
 package com.sheep.etayhn.sheeporderform;
 
 import android.content.Intent;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.text.Editable;
-import android.text.InputFilter;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
@@ -54,9 +53,9 @@ public class SheepOrderForm extends ActionBarActivity implements View.OnClickLis
         // setting maximum sheep number in the seek bar
         numSheepSeekBar.setMax(MAX_SHEEP_VALUE);
         // setting maximum sheep number in the edit text
-        InputFilter[] filterArray = new InputFilter[1];
-        filterArray[0] = new InputFilter.LengthFilter(MAX_SHEEP_NUM_DIGITS);
-        numSheepEditText.setFilters(filterArray);
+//        InputFilter[] filterArray = new InputFilter[1];
+//        filterArray[0] = new InputFilter.LengthFilter(MAX_SHEEP_NUM_DIGITS);
+//        numSheepEditText.setFilters(filterArray);
     }
 
     /* ********* Menu ********* */
@@ -86,9 +85,12 @@ public class SheepOrderForm extends ActionBarActivity implements View.OnClickLis
         Log.d("WHERE", "getMakeOrderEnablingState");
 
         // getting the value from the EditText
-        String stringValue = numSheepEditText.getText().toString();
         int numSheepValue;
-        numSheepValue = Integer.parseInt(stringValue);
+        try {
+            numSheepValue = Integer.parseInt(numSheepEditText.getText().toString());
+        } catch(NumberFormatException e) {
+            numSheepValue = 0;
+        }
 
         // getting the CheckBox state
         boolean isWithFoodChecked = withFoodCheckBox.isChecked();
@@ -126,7 +128,7 @@ public class SheepOrderForm extends ActionBarActivity implements View.OnClickLis
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         // Handle the result according to the parameters
-        if (requestCode == Constants.SELECT_FOOD_TAG) {
+        if (requestCode == Constants.SELECT_FOOD_TAG && data != null) {
             // assertEquals(Activity.RESULT_OK, resultCode);
             String chosenFood = data.getStringExtra(Constants.CHOSEN_FOOD_TAG);
             Toast.makeText(getApplicationContext(), getResources().getString(R.string.you_chose) + " " + chosenFood, Toast.LENGTH_SHORT).show();
@@ -148,27 +150,23 @@ public class SheepOrderForm extends ActionBarActivity implements View.OnClickLis
     @Override
     public void onTextChanged(CharSequence s, int start, int before, int count) {
         Log.d("WHERE", "onTextChanged");
-        int value;
 
+        int value;
         // retrieving the value
         try {
             value = Integer.parseInt(s.toString());
         } catch (NumberFormatException nfe) {
-            value = 0;
+            if (s.length() > MAX_SHEEP_NUM_DIGITS) {
+                value = numSheepSeekBar.getMax();
+            } else {
+                value = 0;
+            }
         }
 
-        // changing the SeekBar according to the EditText value
         numSheepSeekBar.setProgress(value);
 
         // enabling or disabling the button
         updateMakeOrderEnabled();
-
-        // putting the cursor in place
-        int cursorPosition = start + count;
-        if (cursorPosition > numSheepEditText.length()) {
-            cursorPosition = numSheepEditText.length();
-        }
-        numSheepEditText.setSelection(cursorPosition);
     }
 
     @Override
@@ -182,11 +180,8 @@ public class SheepOrderForm extends ActionBarActivity implements View.OnClickLis
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
         Log.d("WHERE", "onProgressChanged");
 
-        // getting the SeekBar value
-        int numSheepValue = seekBar.getProgress();
-
-        // changing the EditText according to the SeekBar value
-        numSheepEditText.setText("" + numSheepValue);
+        numSheepEditText.setText("" + progress);
+        numSheepEditText.setSelection(numSheepEditText.length());
 
         // enabling or disabling the button
         updateMakeOrderEnabled();

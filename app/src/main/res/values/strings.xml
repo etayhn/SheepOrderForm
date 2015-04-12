@@ -14,13 +14,11 @@
 
     <string name="baby_moses">Baby Moses in a Basket</string>
     <string name="pineapple_hedgehog">Pineapple Hedgehog</string>
-    <string name="turtle_burger">Tutle Burger</string>
+    <string name="turtle_burger">Turtle Burger</string>
     <string name="cauliflower_sheep">Cauliflower Sheep</string>
     <string name="rice_piggies">Rice Piggies</string>
     <string name="watermelon_man">Watermelon Man</string>
     <string name="orange_kitten">Orange Kitten</string>
     <string name="snake_cake">Snake Cake</string>
 
-
-    <string name="hello_world">Hello world!</string>
 </resources>
